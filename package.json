@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tfx extension create --output-path dist --manifest-globs vss-extension.json"
+    "create-extension": "tfx extension create --output-path dist --manifest-globs vss-extension.json"
   },
   "keywords": [],
   "author": "",

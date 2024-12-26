@@ -1,9 +1,9 @@
 {
     "manifestVersion": 1,
-    "id": "azure-pipelines-html-reports-tab",
-    "publisher": "Renato Matos",
+    "id": "azure-devops-html-report-tab",
+    "publisher": "renato-matos79-gmail-com",
     "version": "1.0.0",
-    "name": "Azure DevOps HTML Report Publisher",
+    "name": "Azure DevOps HTML Report Tab",
     "description": "Embed HTML reports in Azure Pipelines",
     "public": false,
     "categories": ["Azure Repos", "Azure Pipelines"],
