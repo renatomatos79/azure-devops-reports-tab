@@ -1,0 +1,55 @@
+{
+  "id": "497D221C-12BC-48AD-B226-4F30DC1C4A5E",
+  "name": "PublishReportX",
+  "friendlyName": "Publish Html Report",
+  "description": "Publish Html Report",
+  "helpMarkDown": "Pipelines task that publishes HTML report files",
+  "category": "Utility",
+  "visibility": [
+    "Build"
+  ],
+  "demands": [],
+  "version": {
+    "Major": "1",
+    "Minor": "0",
+    "Patch": "16"
+  },
+  "minimumAgentVersion": "2.144.0",
+  "instanceNameFormat": "Publish Html Report",
+  "inputs": [
+    {
+      "name": "tabName",
+      "type": "string",
+      "label": "Report tab name",
+      "defaultValue": "HTML-Report",
+      "required": false,
+      "helpMarkDown": "Name of the tab displayed in the report window"
+    },
+    {
+      "name": "reportDir",
+      "type": "string",
+      "label": "HTML file or directory path",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The HTML file or directory path for the file(s) to be published"
+    },
+    {
+      "name": "useFilenameTabs",
+      "type": "boolean",
+      "label": "Use filenames as tab names",
+      "defaultValue": "true",
+      "required": false,
+      "helpMarkDown": "When using reports from a directory, use the filename as the tab header for each file."
+    }
+  ],
+  "execution": {
+    "Node16": {
+      "target": "index.js",
+      "argumentFormat": ""
+    },
+    "Node20_1": {
+      "target": "index.js",
+      "argumentFormat": ""
+    }
+  }
+}
