@@ -1,0 +1,66 @@
+{
+  "name": "azure-pipelines-html-reports",
+  "dependencies": {
+    "@material-ui/core": "^4.10.1",
+    "@material-ui/icons": "^4.9.1",
+    "azure-devops-extension-api": "^4.245.1",
+    "azure-devops-extension-sdk": "^4.0.2",
+    "azure-devops-ui": "^2.246.0",
+    "dashify": "^2.0.0",
+    "material-table": "^1.63.0",
+    "mustache": "^4.2.0",
+    "node-fetch": "^3.3.2",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "react-inspector": "^6.0.2"
+  },
+  "devDependencies": {
+    "aguid": "^2.0.0",
+    "mustache": "^4.2.0",
+    "@types/node": "^22.9.0",
+    "@types/node-fetch": "^2.5.5",
+    "@types/react": "^16.8.1",
+    "@types/react-dom": "16.8.1",
+    "base64-inline-loader": "^2.0.1",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^7.1.2",
+    "file-loader": "^6.0.0",
+    "jsdom": "^25.0.1",
+    "rimraf": "^6.0.1",
+    "sass": "^1.80.6",
+    "sass-loader": "^16.0.3",
+    "style-loader": "^4.0.0",
+    "tfx-cli": "^0.17.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.3",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "generate:guid": "node --require=aguid -p \"require('aguid')().toUpperCase()\"",
+    "generate:overview": "node ./scripts/build-overview.js",
+    "generate:readme": "node ./scripts/build-readme.js",
+    "prepare:test": "./scripts/map_node.sh",
+    "prepare:dev-release": "tfx extension create --manifest-globs ./vss-extension.json",
+    "create": "tfx extension create --output-path dist --manifest-globs vss-extension.json",
+    "build": "webpack --mode development",
+    "build:create": "npm run build && npm run create"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

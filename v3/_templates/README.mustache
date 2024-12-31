@@ -1,0 +1,77 @@
+# {{friendlyName}}
+
+{{description}}
+
+## Syntax
+
+```yaml
+jobs:
+  - task: {{name}}@{{version.Major}}
+    inputs:
+    {{#inputs}}
+      {{^required}}#{{/required}}{{name}}: {{#defaultValue}}{{defaultValue}} {{/defaultValue}}# {{type}}. {{#hasAliases}}Alias: {{aliases_condensed}}. {{/hasAliases}}{{#required}}Required. {{/required}}{{label}}
+    {{/inputs}}
+```
+
+## Inputs
+
+{{#inputs}}
+**`{{name}}` - {{label}}**
+
+{{#hasAliases}}Input Alias: {{{aliases_expanded}}}. {{/hasAliases}}`{{type}}`. {{#required}}Required.{{/required}}{{#defaultValue}} Default value: `{{defaultValue}}`.{{/defaultValue}}
+
+{{#helpMarkDown}}
+{{helpMarkDown}}
+
+{{/helpMarkDown}}
+
+{{/inputs}}
+### Task control options
+
+All tasks have control options in addition to their task inputs. For more information, see [Control options and common task properties](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/steps-task#common-task-properties).
+
+## Output variables
+
+This tasks defines the following [output variables](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables#use-output-variables-from-tasks), which you can consume in downstream steps, jobs and stages.
+
+{{#outputVariables}}
+`{{name}}`
+
+{{description}}
+
+
+{{/outputVariables}}
+{{^outputVariables}}
+None.
+{{/outputVariables}}
+
+## Remarks
+{{#hasRemarksPartial}}
+{{> remarks }}
+
+
+{{/hasRemarksPartial}}
+{{^hasRemarksPartial}}
+
+None.
+
+{{/hasRemarksPartial}}
+{{#hasExamplesPartial}}
+## Examples
+
+{{> examples }}
+
+{{/hasExamplesPartial}}
+## Requirements
+
+Requirement | Description
+----------- | ------------
+Pipeline Types | YAML
+Runs on | Agent
+Demands | {{#demands}}`{{demands}}`{{/demands}}{{^demands}}None{{/demands}}
+Capabilities | This task does not satisfy any demands for subsequent tasks in the job.
+Command restrictions | Any
+Settable variables | Any
+Agent version | 2.0.0 or greater
+Task category | {{category}}
+ 
