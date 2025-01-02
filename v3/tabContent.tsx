@@ -1,11 +1,10 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import * as SDK from "azure-devops-extension-sdk"
-import { unescape } from 'html-escaper';
+import { encode } from 'he'
 
 import { getClient } from "azure-devops-extension-api"
 import { Build, BuildRestClient, Attachment } from "azure-devops-extension-api/Build"
-
 import { ObservableValue, ObservableObject } from "azure-devops-ui/Core/Observable"
 import { Observer } from "azure-devops-ui/Observer"
 import { Tab, TabBar, TabSize } from "azure-devops-ui/Tabs"
@@ -24,7 +23,6 @@ SDK.ready().then(() => {
       console.log('debug::build: ', build)
       let buildAttachmentClient = new BuildAttachmentClient(build)
       buildAttachmentClient.init().then(() => {
-        debugger
         console.log('debug::displayReports: ', buildAttachmentClient)
         displayReports(buildAttachmentClient)
       }).catch(error => {
@@ -132,8 +130,8 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
     this.tabContents = new ObservableObject()
   }
 
-  public escapeHTML(str: string) {
-    return unescape(str)
+  public escapeHTML(str: string): string {
+    return encode(str);
   }
 
   public render() {
@@ -147,7 +145,8 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
       console.log('debug::filteredAttachments: ', filteredAttachments)  
       for (const attachment of filteredAttachments) {
         try {
-          const metadata = attachment.name.split('~')
+          debugger
+          const metadata = attachment.name.split('.')
           console.log('debug::render:metadata: ', metadata)
 
           // Determine the tab name and optionally add a badge count
@@ -192,7 +191,10 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
             {(props: { selectedTabId: string }) => {
               if ( this.tabContents.get(props.selectedTabId) === this.tabInitialContent) {
                 this.props.attachmentClient.getAttachmentContent(props.selectedTabId).then((content) => {
-                  this.tabContents.set(props.selectedTabId, '<iframe class="wide flex-row flex-center" srcdoc="' + this.escapeHTML(content) + '"></iframe>')
+                  console.log('debug::content: ', content)
+                  const escapeContent = this.escapeHTML(content)
+                  console.log('debug::content-escape: ', escapeContent)
+                  this.tabContents.set(props.selectedTabId, '<iframe class="wide flex-row flex-center" srcdoc="' + escapeContent + '"></iframe>')
               })
             }
               return <span dangerouslySetInnerHTML={ {__html: this.tabContents.get(props.selectedTabId)} } />

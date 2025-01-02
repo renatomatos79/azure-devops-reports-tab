@@ -7,7 +7,7 @@
     "azure-devops-extension-sdk": "^4.0.2",
     "azure-devops-ui": "^2.246.0",
     "dashify": "^2.0.0",
-    "html-escaper": "^3.0.3",
+    "he": "^1.2.0",
     "material-table": "^1.63.0",
     "mustache": "^4.2.0",
     "node-fetch": "^3.3.2",

@@ -3,7 +3,7 @@ const { resolve, basename, dirname } = require('path');
 const dashify = require('dashify')
 const globby = require('globby')
 const { readFileSync, writeFileSync } = require('fs')
-// const { load } = require('cheerio');
+const { load } = require('cheerio');
 
 // this type is used to attach the summary file to the build 
 // tabContent uses this type to display the summary file
@@ -28,9 +28,8 @@ function run () {
     onlyHtmlFiles.forEach(file => {
       console.log(`debug::Reading report file: ${file}`);
       const fileContent = readFileSync(file, 'utf8');
-      //const document = load(fileContent);
-      //writeFileSync(file, document.html());
-      writeFileSync(file, fileContent);
+      const document = load(fileContent);
+      writeFileSync(file, document.html());
 
       const attachmentProperties = {
           name: generateName(basename(file)),
