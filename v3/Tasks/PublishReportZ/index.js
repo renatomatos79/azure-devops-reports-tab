@@ -20,7 +20,7 @@ function run () {
         sourceDir
     });
 
-    const onlyHtmlFiles = globby.sync([sourceDir], {expandDirectories : {files: ['*'], extensions: ['html']}}).filter(file => file.endsWith('playwright-report/index.html'));;
+    const onlyHtmlFiles = globby.sync([sourceDir], {expandDirectories : {files: ['*'], extensions: ['html']}});
     const fileProperties = [];
 
     console.log(`debug::printing all files ${JSON.stringify(onlyHtmlFiles)}`);

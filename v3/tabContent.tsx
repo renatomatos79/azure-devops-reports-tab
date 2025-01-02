@@ -1,6 +1,7 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import * as SDK from "azure-devops-extension-sdk"
+import { escape } from 'html-escaper';
 
 import { getClient } from "azure-devops-extension-api"
 import { Build, BuildRestClient, Attachment } from "azure-devops-extension-api/Build"
@@ -132,13 +133,7 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
   }
 
   public escapeHTML(str: string) {
-    return str.replace(/[&<>'"]/g, tag => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      "'": '&#39;',
-      '"': '&quot;'
-    }[tag] || tag))
+    return escape(str)
   }
 
   public render() {
@@ -148,7 +143,7 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
     } else {
       const tabs = []
       // Filter out attachments that are not html files
-      const filteredAttachments = attachments.filter(attachment => attachment.name.endsWith('index.html'))
+      const filteredAttachments = attachments.filter(attachment => attachment.name.endsWith('html'))
       console.log('debug::filteredAttachments: ', filteredAttachments)  
       for (const attachment of filteredAttachments) {
         try {
