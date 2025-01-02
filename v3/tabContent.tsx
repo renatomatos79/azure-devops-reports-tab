@@ -1,7 +1,7 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import * as SDK from "azure-devops-extension-sdk"
-import { escape } from 'html-escaper';
+import { unescape } from 'html-escaper';
 
 import { getClient } from "azure-devops-extension-api"
 import { Build, BuildRestClient, Attachment } from "azure-devops-extension-api/Build"
@@ -133,7 +133,7 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
   }
 
   public escapeHTML(str: string) {
-    return escape(str)
+    return unescape(str)
   }
 
   public render() {
