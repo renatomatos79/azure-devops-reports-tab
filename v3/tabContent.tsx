@@ -13,7 +13,6 @@ const ATTACHMENT_TYPE = "report-html";
 
 console.log('debug::starting tabContent')
 
-debugger
 SDK.init()
 SDK.ready().then(() => {
   try {
@@ -145,12 +144,13 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
       console.log('debug::filteredAttachments: ', filteredAttachments)  
       for (const attachment of filteredAttachments) {
         try {
-          debugger
+          // for more details, check generateName in Tasks/PublishReport/index.ts
+          // ${tabName}.${jobName}.${stageName}.${stageAttempt}.${fileName}`
           const metadata = attachment.name.split('.')
           console.log('debug::render:metadata: ', metadata)
 
           // Determine the tab name and optionally add a badge count
-          let name = metadata[0];
+          let name = `${metadata[4]}.html`;
           let badgeCount = undefined; // Default badgeCount is undefined which means no badge is shown
 
           if (metadata[2] !== '__default') {
