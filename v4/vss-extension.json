@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "azure-pipelines-html-reports",
-    "version": "1.2.58",
+    "version": "1.2.61",
     "name": "Azure DevOps HTML Report Publisher",
     "publisher": "renato-matos79-gmail-com",
     "description": "Embed HTML reports in Azure Pipelines",

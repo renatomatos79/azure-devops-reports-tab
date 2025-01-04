@@ -8,7 +8,8 @@ import { ObservableValue, ObservableObject } from "azure-devops-ui/Core/Observab
 import { Observer } from "azure-devops-ui/Observer"
 import { Tab, TabBar, TabSize } from "azure-devops-ui/Tabs"
 
-const ATTACHMENT_TYPE = "report-html";
+const ATTACHMENT_TYPE_REPORT = "report-html";
+const ATTACHMENT_TYPE_SETTINGS = "report-settings";
 
 SDK.init()
 SDK.ready().then(() => {
@@ -36,10 +37,19 @@ function displayReports(attachmentClient: AttachmentClient) {
   ReactDOM.render(<TaskAttachmentPanel attachmentClient={attachmentClient} />, document.getElementById("dev-root"))
 }
 
+interface AttachmentSettingsContent {
+  name: string
+  type: string
+  value: string
+}
+
 abstract class AttachmentClient {
   protected attachments: Attachment[] = []
+  protected settings: Attachment[] = []
   protected authHeaders: Object = undefined
   protected reportHtmlContent: string = undefined
+  protected reportParameters: AttachmentSettingsContent[] = []
+
   constructor() {}
 
   public getAttachments() : Attachment[] {
@@ -84,6 +94,12 @@ abstract class AttachmentClient {
       throw new Error(error)
     }
   }
+
+  public buildURL(reportName: string): string {
+    const baseURL = this.reportParameters.find((setting) => { return setting.name === 'storageUrl' }).value
+    const token = this.reportParameters.find((setting) => { return setting.name === 'storageToken' }).value
+    return `${baseURL}/${reportName}?${token}`
+  }
 }
 
 class BuildAttachmentClient extends AttachmentClient {
@@ -101,9 +117,26 @@ class BuildAttachmentClient extends AttachmentClient {
 
   public async init() {
     try {
+      debugger
       const buildClient: BuildRestClient = getClient(BuildRestClient)
-      this.attachments = await buildClient.getAttachments(this.build.project.id, this.build.id, ATTACHMENT_TYPE)
+
+      // should be in parallel
+      this.settings = await buildClient.getAttachments(this.build.project.id, this.build.id, ATTACHMENT_TYPE_SETTINGS)
+      this.attachments = 
+      [
+        ...await buildClient.getAttachments(this.build.project.id, this.build.id, ATTACHMENT_TYPE_REPORT),
+        ...this.settings
+      ]
+      
+      console.log('debug::init settings: ', this.settings)
       console.log('debug::init attachments: ', this.attachments)
+
+      // get the report settings
+      if (this.settings.length > 0) {
+        const content = await this.getAttachmentContent(this.settings[0].name)
+        this.reportParameters = JSON.parse(content)
+        console.log('debug::init reportParameters: ', this.reportParameters)
+      }
     } catch (error) {
       console.log('debug::init ERROR: ', error)
       throw new Error
@@ -128,7 +161,8 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
   }
 
   public render() {
-    const atts = this.props.attachmentClient.getAttachments()
+    // Filter out attachments that are not html files
+    const atts = this.props.attachmentClient.getAttachments().filter(attachment => attachment.name.endsWith('html')) 
     if (atts.length == 0) {
       return (null)
     } else {
@@ -144,7 +178,7 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
           console.log('debug::render:metadata: ', metadata)
 
           // Determine the tab name and optionally add a badge count
-          let name = `${metadata[4]}.html`;
+          let name = `${metadata[4]}.${metadata[5]}`;
           let badgeCount = undefined; // Default badgeCount is undefined which means no badge is shown
 
           if (metadata[2] !== '__default') {
@@ -183,10 +217,11 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
           <Observer selectedTabId={this.selectedTabId} tabContents={this.tabContents}>
             {(props: { selectedTabId: string }) => {
               if ( this.tabContents.get(props.selectedTabId) === this.tabInitialContent) {
-                this.props.attachmentClient.getAttachmentContent(props.selectedTabId).then((content) => {
-                  console.log('debug::content: ', content)
-                  this.tabContents.set(props.selectedTabId, '<iframe class="wide flex-row flex-center" srcdoc="' + content + '"></iframe>')
-              })
+                const metadata = props.selectedTabId.split('.')
+                const reportName = `${metadata[4]}.${metadata[5]}`
+                const url = this.props.attachmentClient.buildURL(reportName)
+                console.log('debug::content: ', url)
+                this.tabContents.set(props.selectedTabId, '<iframe class="wide flex-row flex-center" src="' + url + '"></iframe>')
             }
               return <span dangerouslySetInnerHTML={ {__html: this.tabContents.get(props.selectedTabId)} } />
             }}

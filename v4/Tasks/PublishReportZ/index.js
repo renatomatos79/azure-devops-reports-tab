@@ -7,6 +7,8 @@ const { load } = require('cheerio');
 // this type is used to attach the summary file to the build 
 // tabContent uses this type to display the summary file
 const ATTACHMENT_TYPE_REPORT = "report-html";
+const ATTACHMENT_TYPE_SETTINGS = "report-settings";
+
 const ATTACHMENT_TYPE_PROP = "task-prop";
 const OUTPUT_REPORT_NAME = 'report-settings.json';
 const BUILD_PARAMS = 'build-params.json';
@@ -40,8 +42,8 @@ function run () {
     
     writeFileSync(buildParamsFile, JSON.stringify(buildParamsProperties));
     const attachmentProperties = {
-        name: BUILD_PARAMS,
-        type: ATTACHMENT_TYPE_PROP,
+        name: generateName(basename(BUILD_PARAMS)),
+        type: ATTACHMENT_TYPE_SETTINGS,
         path: buildParamsFile
     };
     fileProperties.push(attachmentProperties);
