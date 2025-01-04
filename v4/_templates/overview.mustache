@@ -1,0 +1,37 @@
+This extension provides an easy way to integrate into Jira from within Azure Pipelines.
+
+## How to use
+
+After [installing the extension][learn-extensions], you can add one (or more) of the tasks listed below to [your pipeline][learn-pipelines].
+
+**Did you know?**
+
+You may know that you have the option to pin a task to a specific *major* version, for example:
+```yaml
+ - task: ExampleTask@1
+```
+
+You can also pin using the full semantic version (MAJOR.MINOR.PATCH).
+```yaml
+ - task: ExampleTask@1.2.3
+```
+
+If you decide not to pin a task to a *major* version, it will always take the latest available version, regardless of breaking changes; so it is recommended at a minimum to pin to a major version.
+
+## Available Tasks
+
+Name | Description | Latest Version
+---- | ----------- | --------------
+{{#tasks}}
+[`{{name}}`][{{readme_alias}}] | {{friendlyName}} | {{version}}
+{{/tasks}}
+{{^tasks}}
+None.
+{{/tasks}}
+
+
+[learn-extensions]: <https://learn.microsoft.com/en-us/azure/devops/marketplace/install-extension?view=azure-devops&tabs=browser> "Learn how to install extensions on Azure DevOps"
+[learn-pipelines]: <https://learn.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops> "Learn about Azure DevOps Pipelines"
+{{#tasks}}
+[{{readme_alias}}]: <{{{readme_url}}}> "{{friendlyName}} Readme"
+{{/tasks}}

@@ -1,0 +1,26 @@
+{
+  "name": "publish-html-report",
+  "version": "1.2.8",
+  "description": "Pipelines task that publishes HTML report files",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "azure-pipelines-task-lib": "^4.17.3",
+    "cheerio": "^1.0.0-rc.3",
+    "dashify": "^2.0.0",
+    "fs": "0.0.2",
+    "fs-extra": "^8.1.0",
+    "hat": "0.0.3",
+    "rimraf": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.35",
+    "@types/dashify": "^1.0.3",
+    "azure-devops-ui": "^2.246.0"
+  },
+  "scripts": {
+    "build": "echo \"No Build Command available\"",
+    "test": "echo \"No Tests implemented yet\""
+  },
+  "license": "ISC"
+}

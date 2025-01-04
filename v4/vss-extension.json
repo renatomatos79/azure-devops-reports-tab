@@ -1,0 +1,72 @@
+{
+    "manifestVersion": 1,
+    "id": "azure-pipelines-html-reports",
+    "version": "1.2.58",
+    "name": "Azure DevOps HTML Report Publisher",
+    "publisher": "renato-matos79-gmail-com",
+    "description": "Embed HTML reports in Azure Pipelines",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "uri": "https://dev.azure.com/Specsavers/DevOpsEngineering/_git/pipeline-extensions_html-test-report-attachment"
+    },
+    "categories": ["Azure Repos", "Azure Pipelines"],
+    "content": {
+        "details": {
+            "path": "README.md"
+        }
+    },
+    "scopes": [
+        "vso.build_execute",
+        "vso.build",
+        "vso.project",
+        "vso.release",
+        "vso.work"
+    ],
+    "contributions": [
+        {
+            "id": "build-html-reports-tab",
+            "type": "ms.vss-build-web.build-results-tab",
+            "description": "Embed HTML file viewer in Azure Pipelines",
+            "targets": ["ms.vss-build-web.build-results-view"],
+            "properties": {
+                "name": "ReportsSpecs",
+                "uri": "dist/tabContent.html",
+                "registeredObjectId": "registerBuild"
+            },
+            "includes": ["ms.vss-releaseManagement-web.release-service-data-external"],
+            "supportsTasks": ["91E0B844-5BC5-4345-814D-ED4B5702BA6F"]
+        },
+        {
+            "id": "91E0B844-5BC5-4345-814D-ED4B5702BA6F",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "Tasks/PublishReportZ",
+                "displayName": "Publish HTML Report"
+            }
+        }
+    ],
+    "files": [
+        {
+            "path": "./dist",
+            "addressable": true
+        },
+        {
+            "path": "./node_modules/azure-devops-extension-sdk",
+            "addressable": true,
+            "packagePath": "lib"
+        },
+        {
+            "path": "./Tasks/PublishReportZ",
+            "packagePath": "Tasks/PublishReportZ",
+            "addressable": false
+        }
+    ]
+}
