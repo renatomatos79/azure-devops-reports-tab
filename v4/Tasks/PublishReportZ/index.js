@@ -8,7 +8,6 @@ const { load } = require('cheerio');
 // tabContent uses this type to display the summary file
 const ATTACHMENT_TYPE_REPORT = "report-html";
 const ATTACHMENT_TYPE_SETTINGS = "report-settings";
-
 const ATTACHMENT_TYPE_PROP = "task-prop";
 const OUTPUT_REPORT_NAME = 'report-settings.json';
 const BUILD_PARAMS = 'build-params.json';
@@ -49,10 +48,8 @@ function run () {
     fileProperties.push(attachmentProperties);
     tl.command('task.addattachment', attachmentProperties, buildParamsFile);
 
-
-    
     // extract html files from the report directory
-    const onlyHtmlFiles = getHtmlFiles(inputReportPath);
+    const onlyHtmlFiles = getFiles(inputReportPath, '.html');
     console.log('debug::printing all files:  ', onlyHtmlFiles);
     
     onlyHtmlFiles.forEach(file => {
@@ -94,14 +91,14 @@ function generateName (fileName) {
     return `${tabName}.${jobName}.${stageName}.${stageAttempt}.${fileName}`
 }
 
-function getHtmlFiles(directory) {
+function getFiles(directory, extension) {
     // Read all files in the directory
     const files = readdirSync(directory);
 
     // Filter only HTML files
     const htmlFiles = files.filter((file) => {
         const fullPath = join(directory, file);
-        return statSync(fullPath).isFile() && extname(file) === '.html';
+        return statSync(fullPath).isFile() && extname(file) === extension;
     });
 
     return htmlFiles.map((file) => join(directory, file));

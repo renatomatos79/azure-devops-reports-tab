@@ -160,6 +160,11 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
     this.tabContents = new ObservableObject()
   }
 
+  public getReportName(attachmentName: string): string {
+    const metadata = attachmentName.split('.')
+    return `${metadata[4]}.${metadata[5]}`
+  }
+
   public render() {
     // Filter out attachments that are not html files
     const atts = this.props.attachmentClient.getAttachments().filter(attachment => attachment.name.endsWith('html')) 
@@ -178,7 +183,7 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
           console.log('debug::render:metadata: ', metadata)
 
           // Determine the tab name and optionally add a badge count
-          let name = `${metadata[4]}.${metadata[5]}`;
+          let name = this.getReportName(attachment.name);
           let badgeCount = undefined; // Default badgeCount is undefined which means no badge is shown
 
           if (metadata[2] !== '__default') {
@@ -217,11 +222,11 @@ export default class TaskAttachmentPanel extends React.Component<TaskAttachmentP
           <Observer selectedTabId={this.selectedTabId} tabContents={this.tabContents}>
             {(props: { selectedTabId: string }) => {
               if ( this.tabContents.get(props.selectedTabId) === this.tabInitialContent) {
-                const metadata = props.selectedTabId.split('.')
-                const reportName = `${metadata[4]}.${metadata[5]}`
+                const reportName = this.getReportName(props.selectedTabId)
                 const url = this.props.attachmentClient.buildURL(reportName)
-                console.log('debug::content: ', url)
-                this.tabContents.set(props.selectedTabId, '<iframe class="wide flex-row flex-center" src="' + url + '"></iframe>')
+                const iframeContent = `<iframe class="wide flex-row flex-center" src="${url}"></iframe>`
+                console.log('debug::iframeContent: ', url)
+                this.tabContents.set(props.selectedTabId, iframeContent)
             }
               return <span dangerouslySetInnerHTML={ {__html: this.tabContents.get(props.selectedTabId)} } />
             }}
